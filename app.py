@@ -3,43 +3,61 @@ import streamlit as st
 # Configuration de la page
 st.set_page_config(page_title="Mission Saint-Valentin 💘", page_icon="❤️")
 
-# CSS mis à jour pour assurer la visibilité (texte noir)
+# CSS pour le fond rose et le texte NOIR (visibilité maximale)
 st.markdown("""
     <style>
-    /* Fond de l'application */
     .stApp { 
         background-color: #fff0f3; 
     }
-    /* Titres et textes forcés en noir */
-    h1, h2, h3, p, span, label { 
+    /* Force tout le texte en noir */
+    h1, h2, h3, p, span, label, div { 
         color: #000000 !important; 
     }
-    /* Style spécifique pour les questions */
-    .stTextInput label, .stSlider label {
-        font-weight: bold;
+    /* Style pour les champs de saisie et le slider */
+    .stTextInput input {
         color: #000000 !important;
+    }
+    .stSlider label {
+        font-weight: bold;
     }
     </style>
 """, unsafe_allow_html=True)
 
 st.title("💘 Le Coffre-Fort de l'Amour")
-st.write("Réponds correctement aux questions pour débloquer ton message...")
+st.write("Réponds correctement aux trois questions pour découvrir ton message secret...")
 
-# Utilisation de colonnes
+# --- Zone de saisie ---
 col1, col2 = st.columns(2)
 
 with col1:
-    q1 = st.text_input("Quelle est la date de notre rencontre ? (ex: 12/05)", "")
+    # Réponse attendue : 21/10/2025
+    date_rep = st.text_input("Quelle est la date de notre rencontre ? (JJ/MM/AAAA)", "")
+
 with col2:
-    q2 = st.text_input("Quel est notre plat préféré ?", "").lower()
+    # Réponse attendue : phantom
+    voiture_rep = st.text_input("Quelle est notre voiture préférée ?", "").lower().strip()
 
-q3 = st.slider("À quel point m'aimes-tu (sur 100) ?", 0, 100, 50)
+# Réponse attendue : 100
+love_score = st.slider("À quel point m'aimes-tu (sur 100) ?", 0, 100, 50)
 
+# --- Logique de validation ---
 if st.button("Tenter d'ouvrir le coffre 🔓"):
-    if q1 == "14/02" and "pizza" in q2 and q3 == 100:
+    # Vérification des 3 conditions
+    if date_rep == "21/10/2025" and voiture_rep == "phantom" and love_score == 100:
         st.balloons()
-        st.success("BRAVO ! Tu as ouvert mon cœur !")
-        st.header("✨ Ton message spécial ✨")
-        st.write("Je t'aime plus que tout. Direction le restaurant ce soir !")
+        st.success("ACCÈS AUTORISÉ ! ✨")
+        
+        st.markdown("---")
+        st.header("💌 Mon Message pour Toi")
+        st.write("""
+        Depuis ce fameux **21 octobre 2025**, ma vie est devenue un vrai rêve. 
+        Même si on n'est pas encore en **Phantom**, on avance ensemble et c'est tout ce qui compte.
+        
+        **Je t'aime plus que tout ! Joyeuse Saint-Valentin !** 🌹
+        """)
+        # Optionnel : décommente la ligne du dessous si tu as une photo dans ton dossier
+        # st.image("notre_photo.jpg", caption="Nous ❤️")
+        
     else:
-        st.error("Oups... Ce n'est pas encore ça. Réessaie ! ❤️")
+        # Message d'erreur si l'un des éléments est faux
+        st.error("Oups... Le coffre reste fermé. Vérifie bien la date, le modèle de la voiture ou ton niveau d'amour ! 🕵️‍♂️")
