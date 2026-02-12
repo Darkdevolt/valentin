@@ -3,18 +3,29 @@ import streamlit as st
 # Configuration de la page
 st.set_page_config(page_title="Mission Saint-Valentin 💘", page_icon="❤️")
 
-# Petit style personnalisé pour l'ambiance
+# CSS mis à jour pour assurer la visibilité (texte noir)
 st.markdown("""
     <style>
-    .stApp { background-color: #fff0f3; }
-    h1 { color: #d00000; }
+    /* Fond de l'application */
+    .stApp { 
+        background-color: #fff0f3; 
+    }
+    /* Titres et textes forcés en noir */
+    h1, h2, h3, p, span, label { 
+        color: #000000 !important; 
+    }
+    /* Style spécifique pour les questions */
+    .stTextInput label, .stSlider label {
+        font-weight: bold;
+        color: #000000 !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
 st.title("💘 Le Coffre-Fort de l'Amour")
 st.write("Réponds correctement aux questions pour débloquer ton message...")
 
-# Utilisation de colonnes pour le rendu
+# Utilisation de colonnes
 col1, col2 = st.columns(2)
 
 with col1:
@@ -25,12 +36,10 @@ with col2:
 q3 = st.slider("À quel point m'aimes-tu (sur 100) ?", 0, 100, 50)
 
 if st.button("Tenter d'ouvrir le coffre 🔓"):
-    # Remplacez les valeurs ci-dessous par vos vraies réponses
     if q1 == "14/02" and "pizza" in q2 and q3 == 100:
-        st.balloons() # Effet de ballons
+        st.balloons()
         st.success("BRAVO ! Tu as ouvert mon cœur !")
         st.header("✨ Ton message spécial ✨")
-        st.write("Je t'aime plus que Python et Streamlit réunis. Bon voyage à Venise !")
-        # st.image("votre_photo.jpg") # Vous pouvez ajouter une photo ici
+        st.write("Je t'aime plus que tout. Direction le restaurant ce soir !")
     else:
         st.error("Oups... Ce n'est pas encore ça. Réessaie ! ❤️")
