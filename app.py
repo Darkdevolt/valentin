@@ -1,31 +1,54 @@
 import streamlit as st
-import streamlit.components.v1 as components
 
 # Configuration
 st.set_page_config(page_title="Pour toi... 💘", page_icon="🌹")
 
-# --- STYLE CSS (Fond Rose, Texte BLANC) ---
-st.markdown("""
+# Initialisation des états
+if 'non_count' not in st.session_state:
+    st.session_state.non_count = 0
+if 'bravo' not in st.session_state:
+    st.session_state.bravo = False
+
+# --- STYLE CSS (Fluide et Rose) ---
+size_oui = 20 + (st.session_state.non_count * 12)
+size_non = max(35 - (st.session_state.non_count * 6), 5)
+
+st.markdown(f"""
     <style>
-    .stApp { background-color: #ff4d6d; }
-    h1, h2, h3, p, span, label, .stMarkdown, div { color: #ffffff !important; }
+    .stApp {{ background-color: #ff4d6d; }}
+    h1, h2, h3, p, span, label, .stMarkdown, div {{ color: #ffffff !important; font-family: 'Arial', sans-serif; }}
     
-    /* Slider blanc */
-    div[data-baseweb="slider"] > div:first-child { background: rgba(255, 255, 255, 0.3) !important; }
-    div[data-baseweb="slider"] div[style*="background-color: rgb(255, 75, 75)"] { background-color: #ffffff !important; }
-    div[role="slider"] { background-color: #ffffff !important; border: 2px solid #ffffff !important; }
-    div[data-testid="stTickBarMin"], div[data-testid="stTickBarMax"], div[data-testid="stSliderThumbValue"] { color: #ffffff !important; }
+    /* Animation de transition pour la fluidité */
+    .stButton button {{
+        transition: all 0.4s ease-in-out !important; 
+        border-radius: 10px !important;
+    }}
+
+    /* Taille dynamique du bouton OUI */
+    div[data-testid="column"]:nth-child(1) button {{
+        font-size: {size_oui}px !important;
+        height: auto !important;
+        padding: 10px !important;
+        background-color: #28a745 !important;
+        border: none !important;
+        color: white !important;
+    }}
+
+    /* Taille dynamique du bouton NON */
+    div[data-testid="column"]:nth-child(2) button {{
+        font-size: {size_non}px !important;
+        background-color: #dc3545 !important;
+        border: none !important;
+        color: white !important;
+        opacity: {max(1 - st.session_state.non_count*0.1, 0.3)} !important;
+    }}
 
     /* Champs de saisie */
-    .stTextInput input { color: #000000 !important; background-color: #ffffff !important; }
-    
-    /* On cache le bouton de base de Streamlit pour l'étape finale */
-    .final-step { text-align: center; padding: 20px; }
+    .stTextInput input {{ color: #000000 !important; background-color: #ffffff !important; }}
     </style>
 """, unsafe_allow_html=True)
 
 st.title("💘 Notre Histoire")
-st.write("Réponds aux questions pour débloquer la suite...")
 
 # --- ÉTAPE 1 : QUESTIONS ---
 col1, col2 = st.columns(2)
@@ -35,89 +58,42 @@ with col2:
     voiture_rep = st.text_input("Quelle est notre voiture préférée ?", "").lower().strip()
 love_score = st.slider("À quel point m'aimes-tu ?", 0, 100, 50)
 
-# --- LOGIQUE PRINCIPALE ---
+# --- LOGIQUE ---
 if date_rep == "21/10/2025" and voiture_rep == "phantom" and love_score == 100:
     st.markdown("---")
     st.write("### 💌 Un petit mot pour toi")
-    st.write("""
-    Ce poème me rappelle la première fois où je t'ai dit je t'aime et oui je t'aime 
-    et oui j'ai bien lu et compris ce poème qui me rappelle un chapitre important 
-    de notre rencontre . BTW je le redis encore mais ton livre sens trop le fatima zahra .
-    """)
+    st.write("Ce poème me rappelle la première fois où je t'ai dit je t'aime et oui je t'aime et oui j'ai bien lu et compris ce poème qui me rappelle un chapitre important de notre rencontre. BTW je le redis encore mais ton livre sens trop le fatima zahra.")
     
     st.markdown("---")
     st.write("### 🧩 Le Jeu")
     st.write("Je sais que tu aimes les puzzles donc on va y jouer de maniere tres simples voici le jeu :")
 
-    poeme_correct = [
-        "Dear Future lover,",
-        "When the time comes and the words 'i love you'",
-        "Sit on the verge of my tongue , held captive by my pride and feminine ego ,",
-        "i want you to hold my neck tight ,And kiss those words out of me ,",
-        "Are you afraid of touching me ,",
-        "Because i might change my mind, Before your lips reach mine ?",
-        "i wish i could tell you not to be scared"
-    ]
-    poeme_melange = sorted(poeme_correct)
-    reponse_utilisateur = st.multiselect("Remets les vers dans l'ordre :", options=poeme_melange)
+    poeme_correct = ["Dear Future lover,", "When the time comes and the words 'i love you'", "Sit on the verge of my tongue , held captive by my pride and feminine ego ,", "i want you to hold my neck tight ,And kiss those words out of me ,", "Are you afraid of touching me ,", "Because i might change my mind, Before your lips reach mine ?", "i wish i could tell you not to be scared"]
+    
+    reponse_utilisateur = st.multiselect("Remets les vers dans l'ordre :", options=sorted(poeme_correct))
 
     if reponse_utilisateur == poeme_correct:
-        st.success("Puzzle réussi ! ✨")
         st.markdown("---")
+        st.header("Veux-tu être ma Valentine ?")
+
+        c1, c2 = st.columns([2, 1]) # Le bouton Oui a plus d'espace
         
-        # --- ÉTAPE FINALE : LE BOUTON FLUIDE (HTML/JS) ---
-        st.subheader("🌹 Une dernière chose...")
+        with c1:
+            if st.button("OUI ! ❤️"):
+                st.session_state.bravo = True
         
-        # Injection du code JavaScript pour la fluidité
-        valentine_html = """
-        <div style="text-align: center; font-family: sans-serif; color: white;">
-            <h2 id="question">Veux-tu être ma Valentine ?</h2>
-            <div style="display: flex; justify-content: center; align-items: center; gap: 20px; height: 200px;">
-                <button id="yesBtn" style="font-size: 20px; padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">OUI ! ❤️</button>
-                <button id="noBtn" style="font-size: 40px; padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">Non</button>
-            </div>
-            <p style="margin-top: 20px; font-style: italic;">ps : nessaye pas dappuyer sur le bouton Non</p>
-        </div>
+        with c2:
+            if st.button("Non"):
+                st.session_state.non_count += 1
+                st.rerun()
 
-        <script>
-            let noClickCount = 0;
-            const yesBtn = document.getElementById('yesBtn');
-            const noBtn = document.getElementById('noBtn');
-            const question = document.getElementById('question');
+        st.write("*ps : nessaye pas dappuyer sur le bouton Non*")
 
-            noBtn.addEventListener('click', () => {
-                noClickCount++;
-                // Le bouton OUI grandit
-                let newYesSize = 20 + (noClickCount * 15);
-                yesBtn.style.fontSize = newYesSize + 'px';
-                
-                // Le bouton NON rétrécit
-                let newNoSize = Math.max(40 - (noClickCount * 7), 5);
-                noBtn.style.fontSize = newNoSize + 'px';
-                if (newNoSize < 10) noBtn.style.opacity = '0.5';
-            });
-
-            yesBtn.addEventListener('click', () => {
-                document.body.innerHTML = `
-                    <div style="text-align: center; color: white; font-family: sans-serif; padding-top: 20px;">
-                        <h1>😍 JE LE SAVAIS !</h1>
-                        <p style="font-size: 20px;">Tu as fait le meilleur choix. Je t'aime ! ❤️</p>
-                        <div style="text-align: left; display: inline-block; margin-top: 20px; font-style: italic;">
-                            <p>Dear Future lover,</p>
-                            <p>When the time comes and the words 'i love you'</p>
-                            <p>Sit on the verge of my tongue , held captive by my pride and feminine ego ,</p>
-                            <p>i want you to hold my neck tight ,And kiss those words out of me ,</p>
-                            <p>Are you afraid of touching me ,</p>
-                            <p>Because i might change my mind, Before your lips reach mine ?</p>
-                            <p>i wish i could tell you not to be scared</p>
-                        </div>
-                    </div>
-                `;
-            });
-        </script>
-        """
-        components.html(valentine_html, height=500)
-
+        if st.session_state.bravo:
+            st.balloons() # ICI les ballons vont fonctionner car c'est du Python pur
+            st.success("JE LE SAVAIS ! 😍")
+            for ligne in poeme_correct:
+                st.write(f"*{ligne}*")
 else:
     if date_rep != "" or voiture_rep != "":
-        st.write("*(Réponds correctement aux questions pour débloquer le jeu...)*")
+        st.write("*(Réponses incorrectes...)*")
