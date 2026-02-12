@@ -1,63 +1,64 @@
 import streamlit as st
 
 # Configuration de la page
-st.set_page_config(page_title="Mission Saint-Valentin 💘", page_icon="❤️")
+st.set_page_config(page_title="Pour toi... 💘", page_icon="🌹")
 
-# CSS pour le fond rose et le texte NOIR (visibilité maximale)
+# CSS : Fond rose et texte NOIR
 st.markdown("""
     <style>
     .stApp { 
         background-color: #fff0f3; 
     }
-    /* Force tout le texte en noir */
-    h1, h2, h3, p, span, label, div { 
+    /* Force le noir pour tous les textes */
+    h1, h2, h3, p, span, label, .stMarkdown, div { 
         color: #000000 !important; 
     }
-    /* Style pour les champs de saisie et le slider */
+    /* Style pour les champs de texte */
     .stTextInput input {
         color: #000000 !important;
-    }
-    .stSlider label {
-        font-weight: bold;
     }
     </style>
 """, unsafe_allow_html=True)
 
-st.title("💘 Le Coffre-Fort de l'Amour")
-st.write("Réponds correctement aux trois questions pour découvrir ton message secret...")
+st.title("💘 Notre Histoire")
+st.write("Réponds à ces quelques questions pour débloquer la suite...")
 
-# --- Zone de saisie ---
+# --- Formulaire de base ---
 col1, col2 = st.columns(2)
 
 with col1:
-    # Réponse attendue : 21/10/2025
     date_rep = st.text_input("Quelle est la date de notre rencontre ? (JJ/MM/AAAA)", "")
 
 with col2:
-    # Réponse attendue : phantom
     voiture_rep = st.text_input("Quelle est notre voiture préférée ?", "").lower().strip()
 
-# Réponse attendue : 100
-love_score = st.slider("À quel point m'aimes-tu (sur 100) ?", 0, 100, 50)
+love_score = st.slider("À quel point m'aimes-tu ?", 0, 100, 50)
 
-# --- Logique de validation ---
-if st.button("Tenter d'ouvrir le coffre 🔓"):
-    # Vérification des 3 conditions
+# --- Validation et affichage du message ---
+if st.button("Valider ❤️"):
     if date_rep == "21/10/2025" and voiture_rep == "phantom" and love_score == 100:
         st.balloons()
-        st.success("ACCÈS AUTORISÉ ! ✨")
         
         st.markdown("---")
-        st.header("💌 Mon Message pour Toi")
-        st.write("""
-        Depuis ce fameux **21 octobre 2025**, ma vie est devenue un vrai rêve. 
-        Même si on n'est pas encore en **Phantom**, on avance ensemble et c'est tout ce qui compte.
+        st.success("Accès accordé... ✨")
         
-        **Je t'aime plus que tout ! Joyeuse Saint-Valentin !** 🌹
+        # Ton texte personnel
+        st.write("### 💌 Un petit mot pour toi")
+        st.write("""
+        Ce poème me rappelle la première fois où je t'ai dit je t'aime et oui je t'aime 
+        et oui j'ai bien lu et compris ce poème qui me rappelle un chapitre important 
+        de notre rencontre.
         """)
-        # Optionnel : décommente la ligne du dessous si tu as une photo dans ton dossier
-        # st.image("notre_photo.jpg", caption="Nous ❤️")
+        
+        st.info("BTW je le redis encore mais ton livre sent trop le fatima zahra.")
+        
+        st.write("---")
+        st.subheader("📖 Voici ton poème préféré pour l'instant :")
+        
+        # ICI : Tu peux copier-coller le texte du poème à la place de l'exemple
+        st.markdown("""
+        > *[Insère ici le texte du poème que tu as choisi]* > *S'il est long, il s'affichera parfaitement ici.*
+        """)
         
     else:
-        # Message d'erreur si l'un des éléments est faux
-        st.error("Oups... Le coffre reste fermé. Vérifie bien la date, le modèle de la voiture ou ton niveau d'amour ! 🕵️‍♂️")
+        st.error("Les réponses ne sont pas encore les bonnes... Réessaie ! 🕵️‍♂️")
