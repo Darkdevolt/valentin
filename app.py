@@ -48,21 +48,23 @@ poeme_melange = sorted(poeme_correct)
 if date_rep == "21/10/2025" and voiture_rep == "phantom" and love_score == 100:
     st.markdown("---")
     
-    # LE TEXTE SUR FATIMA APPARAÎT ICI (Dès que les infos de base sont ok)
+    # Message sur Fatima
     st.write("### 💌 Un petit mot pour toi")
     st.write("""
     Ce poème me rappelle la première fois où je t'ai dit je t'aime et oui je t'aime 
     et oui j'ai bien lu et compris ce poème qui me rappelle un chapitre important 
     de notre rencontre . BTW je le redis encore mais ton livre sens trop le fatima zahra . 
-    voici le poeme preferer pour linstant .
     """)
     
     st.markdown("---")
-    st.subheader("🧩 Le Puzzle du Poème")
-    st.write("Remets maintenant les vers dans l'ordre :")
     
+    # TON NOUVEAU COMMENTAIRE
+    st.write("### 🧩 Le Jeu")
+    st.write("Je sais que tu aimes les puzzles donc on va y jouer de maniere tres simples voici le jeu :")
+    
+    # Le puzzle interactif
     reponse_utilisateur = st.multiselect(
-        "Choisis les phrases dans l'ordre chronologique :",
+        "Remets les vers du poème dans le bon ordre chronologique :",
         options=poeme_melange
     )
 
@@ -70,13 +72,13 @@ if date_rep == "21/10/2025" and voiture_rep == "phantom" and love_score == 100:
         if reponse_utilisateur == poeme_correct:
             # LES BALLONS APPARAISSENT UNIQUEMENT ICI
             st.balloons() 
-            st.success("C'est parfait... ✨")
+            st.success("C'est parfait... Tu as réussi ! ✨")
             
-            st.subheader("📖 Ton Poème :")
+            st.subheader("📖 Ton Poème Préféré :")
             for ligne in poeme_correct:
                 st.write(f"*{ligne}*")
         else:
             st.error("Le poème n'est pas encore dans le bon ordre. Retente ta chance !")
 else:
     if date_rep != "" or voiture_rep != "":
-        st.write("*(Réponds correctement aux questions pour voir la suite...)*")
+        st.write("*(Réponds correctement aux questions pour libérer le jeu...)*")
